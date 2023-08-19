@@ -1,13 +1,14 @@
 class Solution {
     public long solution(long price, long money, int count) {
         // 제한사항에서 money가 int형의 범위를 넘어 int를 long으로 변경
-        long answer = money - price * (count * (count + 1) / 2) < 0? Math.abs(money - price * (count * (count + 1) / 2)):0;
+        long temp = money - price * (count * (count + 1) / 2);
+        long answer = temp < 0? Math.abs(temp):0;
 
-        // // for-loop를 이용해 money에 빼준다.
+        // for-loop를 이용해 money에 빼준다.
         // for (int i = 1; i <= count; i++) {
         //     money -= price * i;
         // }
-        // // 돈이 -이면 절댓값을 answer에 넣어준다. 아니면 0
+        // 돈이 -이면 절댓값을 answer에 넣어준다. 아니면 0
         // if (money < 0) {
         //     answer = Math.abs(money);
         // } else {
