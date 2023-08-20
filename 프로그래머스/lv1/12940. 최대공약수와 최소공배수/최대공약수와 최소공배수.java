@@ -3,6 +3,7 @@ class Solution {
         int[] answer = new int[2];
         int temp = 0;
 
+        // n을 작은 수로 m을 큰 수로 고정
         if (n > m) {
             temp = n;
             n = m;
@@ -22,8 +23,8 @@ class Solution {
             }
             // 최소공배수 구하기
             int cnt = 1;
-            while (true) {
-                if (m * cnt % n == 0) {
+            while (true) { // m의 배수 중 n의 배수 찾기
+                if (m * cnt % n == 0) { 
                     answer[1] = m * cnt;
                     break;
                 }
