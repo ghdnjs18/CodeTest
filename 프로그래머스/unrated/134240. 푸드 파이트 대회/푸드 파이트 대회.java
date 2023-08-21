@@ -3,7 +3,7 @@ import java.util.*;
 class Solution {
     public String solution(int[] food) {
         String answer = "";
-        
+
         // ArrayDeque선언
         Deque<String> deque = new ArrayDeque<>();
         // 중간 지점인 물을 기준점으로 먼저 넣어준다.
@@ -17,12 +17,12 @@ class Solution {
                 deque.addLast(String.valueOf(i).repeat(food[i] / 2));
             }
         }
-        
+
         // ArrayDeque의 값들을 answer에 추가해준다.
         while (deque.iterator().hasNext()) {
             answer += deque.pop();
         }
-        
+
         return answer;
     }
 }
