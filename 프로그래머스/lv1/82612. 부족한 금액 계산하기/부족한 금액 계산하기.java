@@ -1,7 +1,7 @@
 import java.util.stream.LongStream;
 
 class Solution {
-    public long solution(long price, long money, long count) {
+    public long solution(int price, int money, int count) {
         // 제한사항에서 money가 int형의 범위를 넘어 int를 long으로 변경
         // 등차수열을 이용하여 필요 금액 계산
         // long temp = money - price * (count * (count + 1) / 2);
