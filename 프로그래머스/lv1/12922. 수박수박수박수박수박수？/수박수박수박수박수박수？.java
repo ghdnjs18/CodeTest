@@ -1,13 +1,12 @@
 class Solution {
     public String solution(int n) {
-        String answer = "";
+        StringBuilder answer = new StringBuilder();
         
-        if (n % 2 == 0) { // 짝수일 경우
-            answer += "수박".repeat(n / 2);
-        } else { // 홀수일 경우
-            answer += "수박".repeat(n / 2);
-            answer += "수";
-        }
-        return answer;
+        answer.append("수박".repeat(n / 2));
+        if (n % 2 != 0) { // 홀수일 경우
+            answer.append("수");
+        } 
+        
+        return answer.toString();
     }
 }
