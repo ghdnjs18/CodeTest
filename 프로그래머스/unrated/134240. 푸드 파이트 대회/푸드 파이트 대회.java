@@ -2,8 +2,8 @@ import java.util.*;
 
 class Solution {
     public String solution(int[] food) {
-        String answer = "";
-
+        StringBuilder answer = new StringBuilder();
+        
         // ArrayDeque선언
         Deque<String> deque = new ArrayDeque<>();
         // 중간 지점인 물을 기준점으로 먼저 넣어준다.
@@ -20,9 +20,9 @@ class Solution {
 
         // ArrayDeque의 값들을 answer에 추가해준다.
         while (deque.iterator().hasNext()) {
-            answer += deque.pop();
+            answer.append(deque.pop());
         }
 
-        return answer;
+        return answer.toString();
     }
 }
