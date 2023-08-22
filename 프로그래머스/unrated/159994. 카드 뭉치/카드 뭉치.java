@@ -9,6 +9,15 @@ class Solution {
         // 카드뭉치를 컨트롤 하기 위해 ArrayList를 이용한다.
         List<String> temp_cards1 = new ArrayList<>(Arrays.asList(cards1));
         List<String> temp_cards2 = new ArrayList<>(Arrays.asList(cards2));
+        
+        // 카드 복사 - for문을 돌리는게 선언시 넣는 것 보다 빠르다.
+        // for (String card : cards1) {
+        //     temp_cards1.add(card);
+        // }
+        // for (String card : cards2) {
+        //     temp_cards2.add(card);
+        // }
+        
 
         // goal을 for-each를 사용하여 순회한다.
         for (String str : goal) {
