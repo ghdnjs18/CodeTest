@@ -5,7 +5,7 @@ class Solution {
         List<Integer> answer = new ArrayList<>();
 
         // 기준 날짜를 숫자로 비교하기 위해서 .을 빼고 숫자로 변경한다.
-        long todays = Long.parseLong(today.replace(".",""));
+        int todays = Integer.parseInt(today.replace(".",""));
 
         // 약관 종류와 유효기간으로 나누어 계산할 수 있도록 map에 담는다.
         Map<String, Integer> terms_map = new HashMap<>();
@@ -18,9 +18,9 @@ class Solution {
         for (int i = 0; i < privacies.length; i++) {
             String[] privacy = privacies[i].split(" ");
 
-            long temp = terms_map.get(privacy[1]);
+            int temp = terms_map.get(privacy[1]);
             String day = privacy[0].replace(".", "");
-            long temp_day = Long.parseLong(day);
+            int temp_day = Integer.parseInt(day);
             // 유효기간을 먼저 계산
             if (temp / 12 > 0) {
                 temp_day += temp / 12 * 10000 + temp % 12 * 100;
