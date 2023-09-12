@@ -12,6 +12,7 @@ class Solution {
 
         // 마지막 문자열에서 공백이 들어가므로 마지막 공백은 삭제
         if (answer.length() > s.length()) answer.deleteCharAt(answer.lastIndexOf(" "));
+        // 문자열 끝나고 공백일 경우 공백 추가
         if (s.length() > answer.length()) answer.append(" ".repeat(s.length() - answer.length()));
         return answer.toString();
     }
