@@ -8,16 +8,18 @@ class Solution {
 
         int count = 0;
         int truckWeight = 0;
+        int bridgeWeight = 0;
         while (true) {
             if (count == truck_weights.length && queue.isEmpty()) break;
             if (count < truck_weights.length) truckWeight = truck_weights[count];
 
             answer++;
             if (answer > bridge_length) {
-                queue.poll();
+                bridgeWeight -= queue.poll();
             }
-            if (truck_weights.length > count && queue.stream().mapToInt(n -> n).sum() + truckWeight <= weight) {
+            if (truck_weights.length > count && bridgeWeight + truckWeight <= weight) {
                 queue.offer(truckWeight);
+                bridgeWeight += truckWeight;
                 count++;
             } else if (truck_weights.length > count) {
                 queue.offer(0);
