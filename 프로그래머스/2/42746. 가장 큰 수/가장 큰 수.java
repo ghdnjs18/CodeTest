@@ -44,18 +44,18 @@ class Solution {
         // 정렬된 배열을 문자열에 추가
         for (int job : numbers) {
             // 맨 앞자리가 0일 경우 해당 숫자로 교체 처리
-            // if (builder.toString().equals("0")) {
-            //     builder = new StringBuilder(String.valueOf(job));
-            // } else {
-            //     builder.append(job);
-            // }
-            if (answer.equals("0")) {
-                answer = String.valueOf(job);
+            if (builder.toString().equals("0")) {
+                builder = new StringBuilder(String.valueOf(job));
             } else {
-                answer += job;
+                builder.append(job);
             }
+            // if (answer.equals("0")) {
+            //     answer = String.valueOf(job);
+            // } else {
+            //     answer += job;
+            // }
         }
          
-        return answer;
+        return answer = builder.toString();
     }
 }
