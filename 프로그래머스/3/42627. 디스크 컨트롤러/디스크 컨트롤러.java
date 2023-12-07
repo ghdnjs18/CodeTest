@@ -2,7 +2,7 @@ class Solution {
     public int solution(int[][] jobs) {
         int answer = 0;
         
-        // 정렬
+        // 배열 정렬
         int[] temp = {};
         int minIndex = 0;
         for (int i = 0; i < jobs.length - 1; i++) {
@@ -23,6 +23,7 @@ class Solution {
             jobs[i] = temp;
         }
 
+        // 작업의 소요시간으로 정렬
         int time = jobs[0][0] + jobs[0][1];
         answer += jobs[0][1];
         for (int i = 0; i < jobs.length - 1; i++) {
