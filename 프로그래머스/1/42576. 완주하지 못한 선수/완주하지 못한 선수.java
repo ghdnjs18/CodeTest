@@ -13,7 +13,14 @@ class Solution {
         for (String s : completion) {
             map.put(s, map.get(s) - 1);
         }
-        answer = map.entrySet().stream().filter(m -> m.getValue() != 0).map(m -> m.getKey()).collect(Collectors.joining());
+        // answer = map.entrySet().stream().filter(m -> m.getValue() != 0).map(m -> m.getKey()).collect(Collectors.joining());
+        
+        for (String key : map.keySet()) {
+            if (map.get(key) != 0){
+                answer = key;
+                break;
+            }
+        }
 
         return answer;
     }
