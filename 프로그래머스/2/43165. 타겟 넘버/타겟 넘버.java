@@ -4,32 +4,36 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 class Solution {
-    static int answer = 0;
     public int solution(int[] numbers, int target) {
+        int answer = 0;
+        
         List<Integer> list = Arrays.stream(numbers).boxed().collect(Collectors.toList());
         
-        dfs(list, new LinkedList<>(), target);
+        answer = dfs(list, new LinkedList<>(), target);
         
         return answer;
     }
     
-    public void dfs(List<Integer> list, LinkedList<Integer> result, int target) {
+    public int dfs(List<Integer> list, LinkedList<Integer> result, int target) {
         if (list.isEmpty()) {
             int sum = 0;
             for (Integer i : result) {
                 sum += i;
             }
-            if (sum == target) answer++;
-            return;
+            return sum == target ? 1 : 0;
         }
+        
+        int answer = 0;
         for (int i = 0; i < 2; i++) {
             int chose = list.get(0);
 
             list.remove(0);
             result.add(chose);
-            dfs(list, result, target);
+            answer += dfs(list, result, target);
             result.removeLast();
             list.add(0, chose * -1);
         }
+        
+        return answer;
     }
 }
