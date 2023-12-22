@@ -29,7 +29,6 @@ public class Main {
 
 
     public static void fibonacci(int target) {
-        // 하향식으로 내려가면서 0과 1일 때만 배열에 체크를 해준다.
         fibonacci[0].zero = 1;
         fibonacci[1].one = 1;
 
