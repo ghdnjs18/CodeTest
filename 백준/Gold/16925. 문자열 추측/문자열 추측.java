@@ -60,7 +60,5 @@ public class Main {
 				return;
 			}
 		}
-		System.out.println(origin[1]);
-		System.out.println(sb.toString());
 	}
 }
