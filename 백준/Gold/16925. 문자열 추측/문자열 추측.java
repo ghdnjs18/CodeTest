@@ -1,64 +1,59 @@
-import java.util.HashSet;
-import java.util.Scanner;
+import java.io.*;
 
 public class Main {
-	
-	static String[] origin;
-	static String[] input;
-	static HashSet<String> set;
-	static StringBuilder sb;
-	static int N;
-	
-	public static void main(String[] args) {
-		Scanner sc = new Scanner(System.in);
-		
-		N = sc.nextInt();
-		
-		set = new HashSet<>();
-		origin = new String[2];
-		input = new String[2 * N - 2];
-		
-		// s, p로 이름지었지만 사실 어떤 것이 접두사인지 접미사인지 모른다.
-		String s = null, p = null;
-		for(int i = 0 ; i < 2 * N - 2 ; ++i) {
-			input[i] = sc.next();
-			if(input[i].length() == N - 1) {
-				// 가장 긴 접두사와 접미사를 찾는다.
-				if(s == null) {
-					s = input[i];
-				} else p = input[i];
-			}
-		}
-		
-		// 각각 앞에 오는 경우로 원본 문자열을 만든다. 
-		origin[0] = s + p.charAt(p.length() - 1);
-		origin[1] = p + s.charAt(s.length() - 1);
-		
-		for(String ori : origin) {
-			// 각 문자열에 대한 접두사이므로 set은 반드시 비워준다.
-			set.clear();
-			sb = new StringBuilder();
-			for(String fix : input) {
+	public static void main(String[] args) throws IOException {
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
+
+        int N = Integer.parseInt(bufferedReader.readLine());
+
+        // 입력값을 배열에 넣어준다.
+        String[] strArray = new String[N * 2 - 2];
+        for (int i = 0; i < 2 * N - 2; i++) {
+            strArray[i] = bufferedReader.readLine();
+        }
+        bufferedReader.close();
+
+        // 가장 긴 문자열과 가장 짧은 문자열을 찾아 각각 배열에 넣어준다.
+        String[] maxStr = new String[2];
+        int maxCnt = 0;
+        for (String s : strArray) {
+            if (s.length() == N - 1) {
+                maxStr[maxCnt++] = s;
+            }
+        }
+
+        // 가장 긴 문자열을 이용해 2개의 원본 문자열 후보를 만든다.
+        String[] originStr = new String[2];
+        originStr[0] = maxStr[0] + maxStr[1].substring(N-2);
+        originStr[1] = maxStr[1] + maxStr[0].substring(N-2);
+
+        // 접두사와 접미사가 같은 문자열을 대비해 접두사 사용 유무를 확인할 배열을 선언한다.
+        boolean[] prefix;
+        StringBuilder stringBuilder;
+        for (String origin : originStr) {
+            prefix = new boolean[N];
+            stringBuilder = new StringBuilder();
+            for (String str : strArray) {
 				// 0이면 접두사로 사용할 수 있다. 
-				if(ori.indexOf(fix) == 0) {
+				if (origin.indexOf(str) == 0) {
 					// 접두사와 접미사 양쪽에 속할 수 있는 경우를 고려한다. 
-					if(!set.contains(fix)) {
-						set.add(fix);
-						sb.append("P");
-					} else sb.append("S");
+					if (!prefix[str.length()]) {
+						prefix[str.length()] = true;
+						stringBuilder.append("P");
+					} else stringBuilder.append("S");
 				} else {
 					// 마지막 문자 비교로 접미사인지 확인한다. 
-					if(fix.charAt(fix.length() - 1) == ori.charAt(ori.length() - 1)) {
-						sb.append("S");
+					if (str.charAt(str.length() - 1) == origin.charAt(origin.length() - 1)) {
+						stringBuilder.append("S");
 					}
 				}
 			}
 			// 빌더의 길이가 접두사, 접미사의 총 개수와 같아야한다.
-			if(sb.length() == 2 * N - 2) {
-				System.out.println(ori);
-				System.out.println(sb.toString());
-				return;
+			if (stringBuilder.length() == 2 * N - 2) {
+				System.out.println(origin);
+				System.out.println(stringBuilder.toString());
+				break;
 			}
-		}
-	}
+        }
+    }
 }
