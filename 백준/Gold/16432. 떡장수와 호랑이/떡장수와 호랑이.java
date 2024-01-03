@@ -37,17 +37,15 @@ public class Main {
     public static void dfs(int day, int before) {
         if (day < 0) return;
 
-        if (eat[0] == 0) {
-            for (int cake : riceCake[day]) {
-                if (!visited[day+1][cake] && cake != before) {
-                    visited[day+1][cake] = true;
+        for (int cake : riceCake[day]) {
+            if (!visited[day+1][cake] && cake != before) {
+                visited[day+1][cake] = true;
 
-                    dfs(day - 1, cake);
+                dfs(day - 1, cake);
 
-                    eat[day] = cake;
-                }
-                if (eat[0] != 0) break;
+                eat[day] = cake;
             }
+            if (eat[0] != 0) break;
         }
     }
 }
