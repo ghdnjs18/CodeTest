@@ -1,45 +1,52 @@
+import java.io.*;
 import java.util.*;
  
 public class Main {    
  
-    static ArrayList<Integer>[] list;
+    static List<Integer>[] riceCake;
+    static int[] eat;
     static boolean[][] visited;
-    static int[] result;
-    
-    public static void main(String[] args) {
-        Scanner scan = new Scanner(System.in);
-        
-        int n = scan.nextInt();
-        
-        list = new ArrayList[n + 1];
-        for(int i = 1; i < n + 1; i++) {
-            list[i] = new ArrayList<>();
-            int m = scan.nextInt();
-            for(int j = 0; j < m; j++) {
-                list[i].add(scan.nextInt());
+
+    public static void main(String[] args) throws IOException {
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
+
+        int N = Integer.parseInt(bufferedReader.readLine());
+        riceCake = new List[N];
+        eat = new int[N];
+        visited = new boolean[N+1][10];
+        for (int i = 0; i < N; i++) {
+            riceCake[i] = new ArrayList<>();
+            StringTokenizer stringTokenizer = new StringTokenizer(bufferedReader.readLine());
+            int index = Integer.parseInt(stringTokenizer.nextToken());
+            for (int j = 0; j < index; j++) {
+                riceCake[i].add(Integer.parseInt(stringTokenizer.nextToken()));
             }
         }
-        
-        result = new int[n + 1];
-        visited = new boolean[n + 2][10]; //[n번째 날][떡의 종류]
-        dfs(1, 0, n);
-        System.out.println("-1");
-        
-    }    
-    
-    public static void dfs(int idx, int prev, int n) {
-        if(idx == n + 1) {
-            for(int i = 1; i < n + 1; i++) {
-                System.out.println(result[i]);
+
+        dfs(N-1, 0);
+
+        if (eat[0] == 0) {
+            System.out.println("-1");
+        } else {
+            for (int i : eat) {
+                System.out.println(i);
             }
-            System.exit(0);
         }
-    
-        for(int i = 1; i < 10; i++) {
-            if(i != prev && visited[idx + 1][i] == false && list[idx].contains((Integer)i)) {
-                visited[idx + 1][i] = true;
-                result[idx] = i;
-                dfs(idx + 1, i, n);
+    }
+
+    public static void dfs(int day, int before) {
+        if (day < 0) return;
+
+        if (eat[0] == 0) {
+            for (int cake : riceCake[day]) {
+                if (!visited[day+1][cake] && cake != before) {
+                    visited[day+1][cake] = true;
+
+                    dfs(day - 1, cake);
+
+                    eat[day] = cake;
+                }
+                if (eat[0] != 0) break;
             }
         }
     }
