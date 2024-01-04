@@ -29,16 +29,18 @@ public class Main {
         
         // 신이 좋아하는 문자열을 만들 수 있는 경우의 수를 확인하기 위해 map 사용
         godStr = new String[K];
+        int max = 0;
         for (int i = 0; i < K; i++) {
             godStr[i] = bufferedReader.readLine();
             godCases.put(godStr[i], 0);
+            max = Math.max(max, godStr[i].length());
         }
         bufferedReader.close();
 
         // 위치별로 움직임 반복
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < M; j++) {
-                dfs(i, j, map[i][j]);
+                dfs(i, j, map[i][j], max);
             }
         }
 
@@ -48,14 +50,14 @@ public class Main {
         }
     }
 
-    public static void dfs(int x, int y, String str) {
+    public static void dfs(int x, int y, String str, int max) {
         // 문자열에 포함이 되어 있으면 경우의 수 체크
         if (godCases.containsKey(str)) {
             godCases.put(str, godCases.get(str) + 1);
         }
 
         // 문자열 크기에 도착하면 종료
-        if (str.length() == godStr[0].length()) {
+        if (str.length() == max) {
             return;
         }
 
@@ -69,7 +71,7 @@ public class Main {
             if (nextX == N) nextX = 0;
             if (nextY == M) nextY = 0;
 
-            dfs(nextX, nextY, str + map[nextX][nextY]);
+            dfs(nextX, nextY, str + map[nextX][nextY], max);
         }
     }
 }
