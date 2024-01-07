@@ -5,8 +5,8 @@ public class Main {
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
 
         int N = Integer.parseInt(bufferedReader.readLine());
-        int cnt = 0;
-        int num = 0;
+        int cnt = 1;
+        int num = 666;
         while (cnt != N) {
             num++;
             if (String.valueOf(num).contains("666")) {
