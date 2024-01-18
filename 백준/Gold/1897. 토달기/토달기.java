@@ -11,6 +11,10 @@ public class Main {
     * 단어의 길이가 순차적으로 늘어나기 때문에 주어진 단어를 오름차순 정렬을 시켜 하는 것이 편해보인다.
     *
     * */
+    static String[] words;
+    static boolean[] visited;
+    static String word = "";
+
     public static void main(String[] args) throws IOException {
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
 
@@ -18,17 +22,22 @@ public class Main {
         int d = Integer.parseInt(stringTokenizer.nextToken());
         String keyword = stringTokenizer.nextToken();
 
-        String[] words = new String[d];
-        boolean[] visited = new boolean[d];
+        words = new String[d];
+        visited = new boolean[d];
         for (int i = 0; i < d; i++) {
             words[i] = bufferedReader.readLine();
         }
         Arrays.sort(words, (o1, o2) -> o1.length() - o2.length());
 
+        BFS(keyword);
+
+        System.out.println(word);
+    }
+
+    public static void BFS(String keyword) {
         Queue<String> queue = new LinkedList<>();
         queue.offer(keyword);
         visited[0] = true;
-        String word = "";
         while (!queue.isEmpty()) {
             word = queue.poll();
 
@@ -68,7 +77,5 @@ public class Main {
                 }
             }
         }
-
-        System.out.println(word);
     }
 }
