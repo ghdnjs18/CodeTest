@@ -38,7 +38,7 @@ public class Main {
         int c = 0;
         // 다음 입력값이 숫자인지 확인해 한자리수를 늘려준다.
         // 비트 연산자 << 1 당 곱하기 2 -> (n * 8 + n * 2 = n * 10) + 새로운 1의 자리
-        while ((c = System.in.read()) > 32) n = (n << 3) + (n << 1) + (c & 15);
+        while ((c = System.in.read()) > 32) n = (n * 10) + (c & 15);
         // \r 일경우 탈출 문자는 read로 받아 다음 숫자에 영향이 안가게 해준다.
         if (c == 13) System.in.read();
         return n;
