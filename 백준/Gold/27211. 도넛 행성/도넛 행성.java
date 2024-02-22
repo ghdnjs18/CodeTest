@@ -10,17 +10,13 @@ public class Main {
     static boolean[][] map;
 
     public static void main(String[] args) throws IOException {
-        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
-        StringTokenizer stringTokenizer = new StringTokenizer(bufferedReader.readLine());
-        N = Integer.parseInt(stringTokenizer.nextToken());
-        M = Integer.parseInt(stringTokenizer.nextToken());
-
+        N = readNumber();
+        M = readNumber();
 
         map = new boolean[N][M];
         for (int i = 0; i < N; i++) {
-            stringTokenizer = new StringTokenizer(bufferedReader.readLine());
             for (int j = 0; j < M; j++) {
-                map[i][j] = Integer.parseInt(stringTokenizer.nextToken()) == 1 ? true : false;
+                map[i][j] = readNumber() == 1 ? true : false;
             }
         }
 
@@ -34,6 +30,18 @@ public class Main {
             }
         }
         System.out.println(cnt);
+    }
+    
+    private static int readNumber() throws IOException {
+        // 숫자를 입력 값으로 받아서 아스키값의 숫자는 48 ~ 57로 15(1111)와 비트 AND 연산을 했을 경우 0 ~ 9를 구할 수 있다.
+        int n = System.in.read() & 15;
+        int c = 0;
+        // 다음 입력값이 숫자인지 확인해 한자리수를 늘려준다.
+        // 비트 연산자 << 1 당 곱하기 2 -> (n * 8 + n * 2 = n * 10) + 새로운 1의 자리
+        while ((c = System.in.read()) > 32) n = (n << 3) + (n << 1) + (c & 15);
+        // \r 일경우 탈출 문자는 read로 받아 다음 숫자에 영향이 안가게 해준다.
+        if (c == 13) System.in.read();
+        return n;
     }
 
     private static void bfs(int x, int y) {
@@ -49,12 +57,10 @@ public class Main {
             int currentY = move[1];
 
             for (int i = 0; i < dx.length; i++) {
-                int nextX = currentX + dx[i];
-                nextX = nextX < 0 ? N - 1 : nextX >= N ? 0 : nextX;
                 // (현재의 숫자 + (1 혹은 -1) + 해당 범위의 숫자) % 해당 범위의 숫자 = 0 ~ 해당 범위 - 1
                 // (0 + 1 + 5) % 5 = 1, (0 - 1 + 5) % 5 = 4
-                int nextY = currentY + dy[i];
-                nextY = nextY < 0 ? M - 1 : nextY >= M ? 0 : nextY;
+                int nextX = (currentX + dx[i] + N) % N;
+                int nextY = (currentY + dy[i] + M) % M;
 
                 if (!map[nextX][nextY]) {
                     queue.offer(new int[]{nextX, nextY});
