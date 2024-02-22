@@ -7,8 +7,7 @@ public class Main {
     * */
 
     static int N, M;
-    static int[][] map;
-    static boolean[][] visited;
+    static boolean[][] map;
 
     public static void main(String[] args) throws IOException {
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
@@ -16,21 +15,20 @@ public class Main {
         N = Integer.parseInt(stringTokenizer.nextToken());
         M = Integer.parseInt(stringTokenizer.nextToken());
 
-        map = new int[N][M];
-        visited = new boolean[N][M];
+
+        map = new boolean[N][M];
         for (int i = 0; i < N; i++) {
             stringTokenizer = new StringTokenizer(bufferedReader.readLine());
             for (int j = 0; j < M; j++) {
-                map[i][j] = Integer.parseInt(stringTokenizer.nextToken());
+                map[i][j] = Integer.parseInt(stringTokenizer.nextToken()) == 1 ? true : false;
             }
         }
 
         int cnt = 0;
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < M; j++) {
-                if (map[i][j] == 0 && !visited[i][j]) {
+                if (!map[i][j]) {
                     bfs(i, j);
-                    visited[i][j] = true;
                     cnt++;
                 }
             }
@@ -44,6 +42,7 @@ public class Main {
 
         Queue<int[]> queue = new LinkedList<>();
         queue.offer(new int[]{x, y});
+        map[x][y] = true;
         while (!queue.isEmpty()) {
             int[] move = queue.poll();
             int currentX = move[0];
@@ -52,12 +51,14 @@ public class Main {
             for (int i = 0; i < dx.length; i++) {
                 int nextX = currentX + dx[i];
                 nextX = nextX < 0 ? N - 1 : nextX >= N ? 0 : nextX;
+                // (현재의 숫자 + (1 혹은 -1) + 해당 범위의 숫자) % 해당 범위의 숫자 = 0 ~ 해당 범위 - 1
+                // (0 + 1 + 5) % 5 = 1, (0 - 1 + 5) % 5 = 4
                 int nextY = currentY + dy[i];
                 nextY = nextY < 0 ? M - 1 : nextY >= M ? 0 : nextY;
 
-                if (map[nextX][nextY] == 0 && !visited[nextX][nextY]) {
-                    visited[nextX][nextY] = true;
+                if (!map[nextX][nextY]) {
                     queue.offer(new int[]{nextX, nextY});
+                    map[nextX][nextY] = true;
                 }
             }
         }
