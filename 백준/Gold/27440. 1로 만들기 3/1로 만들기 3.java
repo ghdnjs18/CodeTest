@@ -9,15 +9,23 @@ public class Main {
     * 2. 2로 나눠지면 2로 나누고 횟수를 증가시킨다.
     * 3. 1을 뺀고 횟수를 증가시킨다.
     * 1이 되면 횟수를 출력해준다.
+    * 주어진 숫자가 10^18로 int의 범위를 넘어가서 boolean 타입을 사용할 수 없어 숫자의 사용 여부를 set을 이용해서 확인해준다.
     * */
 
     public static void main(String[] args) throws IOException {
-        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
-        long N = Long.parseLong(bufferedReader.readLine());
+        long N = readNumber();
 
         long cnt = bfs(N);
 
         System.out.println(cnt);
+    }
+    
+    private static long readNumber() throws IOException {
+        long cur = System.in.read() & 15;
+        long next = 0;
+        while ((next = System.in.read()) > 32) cur = (cur * 10) + (next & 15);
+        if (next == 13) System.in.read();
+        return cur;
     }
 
     private static long bfs(long N) {
