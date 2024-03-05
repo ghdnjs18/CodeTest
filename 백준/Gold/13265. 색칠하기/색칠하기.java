@@ -2,75 +2,77 @@ import java.io.*;
 import java.util.*;
 
 public class Main {
-    static ArrayList<ArrayList<Integer>> list;
-    static int color[];
-    static boolean check = false;
 
-        public static void main(String args[]) throws IOException {
-            BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-            BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(System.out));
+    static List<List<Integer>> connectCircle;
+    static int[] circle;
+    static boolean check;
 
-            int t = Integer.parseInt(br.readLine());
+    public static void main(String[] args) throws IOException {
+        StringBuilder stringBuilder = new StringBuilder();
 
-            while(t-->0){
-                list = new ArrayList<>();
+        // 테스트 케이스의 개수
+        int T = readNumber();
 
-                StringTokenizer st = new StringTokenizer(br.readLine());
-                int n = Integer.parseInt(st.nextToken());
-                int m = Integer.parseInt(st.nextToken());
+        // 테스트 케이스 입력 받기
+        for (int i = 0; i < T; i++) {
+            // 동그라미의 개수
+            int N = readNumber();
+            // 직선들의 개수
+            int M = readNumber();
 
-                for(int i=0; i<=n; i++)
-                    list.add(new ArrayList<>());
-
-                for(int i=0; i<m; i++){
-                    st = new StringTokenizer(br.readLine());
-                    int a = Integer.parseInt(st.nextToken());
-                    int b = Integer.parseInt(st.nextToken());
-                    list.get(a).add(b);
-                    list.get(b).add(a);
-                }
-
-                color = new int[n+1];
-                check = false;
-
-                for(int i=1; i<=n; i++){
-                    if(color[i] == 0)
-                        bfs(i);
-
-                    if(check)
-                        break;
-
-                }
-
-                if(check)
-                    bw.write("impossible\n");
-                else
-                    bw.write("possible\n");
-
+            
+            connectCircle = new ArrayList<>();
+            for (int j = 0; j <= N; j++) {
+                connectCircle.add(new ArrayList<>());
+            }
+            
+            // 동그라미 직선 연결
+            for (int j = 0; j < M; j++) {
+                int lineA = readNumber();
+                int lineB = readNumber();
+                connectCircle.get(lineA).add(lineB);
+                connectCircle.get(lineB).add(lineA);
             }
 
-            bw.close();
-        }
-
-        public static void bfs(int start){
-            Queue<Integer> q = new LinkedList<>();
-            q.add(start);
-            color[start] = 1;
-
-            while(!q.isEmpty()){
-                int cur = q.poll();
-
-                for(int next : list.get(cur)){
-                    if(color[next] == 0){
-                        q.add(next);
-                        color[next] = color[cur] * -1;
-                    }else if(color[next] + color[cur] != 0){
-                        check = true;
-                        return;
-                    }
-                }
+            circle = new int[N + 1];
+            check = false;
+            for (int j = 1; j <= N; j++) {
+                if (circle[j] == 0) bfs(j);
+                if (check) break;
             }
+
+            if (check) stringBuilder.append("impossible").append("\n");
+            else stringBuilder.append("possible").append("\n");
         }
 
-
+        System.out.println(stringBuilder);
     }
+
+    private static int readNumber() throws IOException {
+        int cur = System.in.read() & 15;
+        int next = 0;
+        while ((next = System.in.read()) > 32) cur = (cur * 10) + (next & 15);
+        if (next == 13) System.in.read();
+        return cur;
+    }
+
+    private static void bfs(int start){
+        Queue<Integer> queue = new LinkedList<>();
+        queue.add(start);
+        circle[start] = 1;
+
+        while (!queue.isEmpty()) {
+            int cur = queue.poll();
+
+            for (int next : connectCircle.get(cur)) {
+                if (circle[next] == 0) {
+                    queue.add(next);
+                    circle[next] = circle[cur] * -1;
+                } else if (circle[next] + circle[cur] != 0) {
+                    check = true;
+                    return;
+                }
+            }
+        }
+    }
+}
