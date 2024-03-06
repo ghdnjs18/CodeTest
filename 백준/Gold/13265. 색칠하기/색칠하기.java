@@ -3,6 +3,11 @@ import java.util.*;
 
 public class Main {
 
+    /*
+    * 그래프 탐색으로 인접한 노드에서 사이클이 발생하는지 확인하는 문제
+    * 동그라미의 개수 -> 노드의 개수, 직선들의 개수 -> 노드간 연결 정보
+    * 탐색은 깊이 탐색과 너비 탐색으로 가능하다.
+    * */
     static List<List<Integer>> connectCircle;
     static int[] circle;
     static boolean check;
@@ -20,13 +25,14 @@ public class Main {
             // 직선들의 개수
             int M = readNumber();
 
-            
+            // 동그라미 직선 연결
             connectCircle = new ArrayList<>();
             for (int j = 0; j <= N; j++) {
                 connectCircle.add(new ArrayList<>());
             }
-            
-            // 동그라미 직선 연결
+
+            circle = new int[N + 1];
+            check = false;
             for (int j = 0; j < M; j++) {
                 int lineA = readNumber();
                 int lineB = readNumber();
@@ -34,10 +40,12 @@ public class Main {
                 connectCircle.get(lineB).add(lineA);
             }
 
-            circle = new int[N + 1];
-            check = false;
             for (int j = 1; j <= N; j++) {
-                if (circle[j] == 0) bfs(j);
+//                if (circle[j] == 0) {
+//                    circle[j] = 1;
+//                    isCycleDFS(j);
+//                }
+                if (circle[j] == 0) isCycleBFS(j);
                 if (check) break;
             }
 
@@ -56,7 +64,19 @@ public class Main {
         return cur;
     }
 
-    private static void bfs(int start){
+    private static void isCycleDFS(int current) {
+        for (int next : connectCircle.get(current)) {
+            if (circle[next] == 0) {
+                circle[next] = 3 - circle[current];
+                isCycleDFS(next);
+            }
+            if (circle[current] == circle[next]) {
+                check = true;
+            }
+        }
+    }
+
+    private static void isCycleBFS(int start){
         Queue<Integer> queue = new LinkedList<>();
         queue.add(start);
         circle[start] = 1;
