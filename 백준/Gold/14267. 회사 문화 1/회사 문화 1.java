@@ -5,11 +5,14 @@ public class Main {
     /*
     * 상사가 직속 부하를 칭찬하면 연쇄적으로 내리 칭찬을 한다. -> 방향 그래프로 깊이 탐색을한다.
     * 연쇄적으로 내리 칭찬을 하는 경우는 반복될 경우 재활용이 가능하다. -> DP를 이용해서 처리할 수 있다.
+    * 추가 수정 -> 사용 여부와 정답 배열을 추가로 사용해서 시간을 단축 할 수 있다.
     * */
 
     static int N, M;
     static List<List<Integer>> relation;
     static int[] praise;
+    static int[] answer;
+    static boolean[] visited;
 
     public static void main(String[] args) throws IOException {
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
@@ -34,6 +37,8 @@ public class Main {
 
         // 칭찬 정보 입력
         praise = new int[N+1];
+        answer = new int[N+1];
+        visited = new boolean[N+1];
         for (int j = 0; j < M; j++) {
             stringTokenizer = new StringTokenizer(bufferedReader.readLine());
             int people = Integer.parseInt(stringTokenizer.nextToken());
@@ -43,18 +48,24 @@ public class Main {
         }
 
         // 내리 칭찬
-        startPraise(1);
+        for (int i = 1; i <= N; i++) {
+            if (!visited[i]) startPraise(1);
+        }
 
         // 칭찬 횟수 출력
         for (int i = 1; i <= N; i++) {
-            System.out.print(praise[i] + " ");
+            System.out.print(answer[i] + " ");
         }
     }
 
     private static void startPraise(int cur) {
+        visited[cur] = true;
+        answer[cur] += praise[cur];
         for (int next : relation.get(cur)) {
-            praise[next] += praise[cur];
-            startPraise(next);
+            if (!visited[next]) {
+                answer[next] += answer[cur];
+                startPraise(next);
+            }
         }
     }
 }
