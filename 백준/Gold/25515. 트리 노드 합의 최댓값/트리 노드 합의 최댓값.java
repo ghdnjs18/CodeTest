@@ -17,10 +17,8 @@ public class Main {
     static long[] visited;
 
     public static void main(String[] args) throws IOException {
-        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
-        StringTokenizer stringTokenizer;
         // 노드의 수
-        N = Integer.parseInt(bufferedReader.readLine());
+        N = readNumber();
 
         // 트리 리스트 생성
         for (int i = 0; i < N; i++) {
@@ -29,23 +27,31 @@ public class Main {
 
         // 트리 간선 입력
         for (int i = 0; i < N-1; i++) {
-            stringTokenizer = new StringTokenizer(bufferedReader.readLine());
-            int nodeA = Integer.parseInt(stringTokenizer.nextToken());
-            int nodeB = Integer.parseInt(stringTokenizer.nextToken());
+            int nodeA = readNumber();
+            int nodeB = readNumber();
 
             tree.get(nodeA).add(nodeB);
         }
 
         // 노드의 값 입력
         nodeValues = new int[N];
-        stringTokenizer = new StringTokenizer(bufferedReader.readLine());
         for (int i = 0; i < N; i++) {
-            nodeValues[i] = Integer.parseInt(stringTokenizer.nextToken());
+            nodeValues[i] = readNumber();
         }
 
         // 최댓값 출력
         visited = new long[N];
         System.out.println(sumNode(0));
+    }
+
+    private static int readNumber() throws IOException {
+        int cur = System.in.read() & 15;
+        int next = 0;
+        boolean flag = cur == 13;
+        if (flag) cur = 0;
+        while ((next = System.in.read()) > 32) cur = (cur * 10) + (next & 15);
+        if (next == 13) System.in.read();
+        return flag ? -cur : cur;
     }
 
     private static long sumNode(int cur) {
