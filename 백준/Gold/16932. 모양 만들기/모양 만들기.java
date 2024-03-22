@@ -46,8 +46,8 @@ public class Main {
         for (int i = 0; i < N; i++) {
             for (int j = 0; j < M; j++) {
                 if (map[i][j] == 1 && !visited[i][j]) {
-//                    indexSize.put(index, getArraySizeBFS(i, j));
-                    indexSize.put(index, getArraySizeDFS(i, j));
+                    indexSize.put(index, getArraySizeBFS(i, j));
+//                    indexSize.put(index, getArraySizeDFS(i, j));
                     index++;
                 }
             }
