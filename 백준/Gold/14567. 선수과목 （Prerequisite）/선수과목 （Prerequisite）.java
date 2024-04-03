@@ -11,7 +11,8 @@ public class Main {
     * 해당 과목이 B번 과목에 있으면 연결된 A 과목 중 가장 큰값에서 +1을 해준다.
     * */
 
-    public static void main(String[] args) throws IOException {
+    // 그래프 비사용
+    /*public static void main(String[] args) throws IOException {
         // 과목의 수
         int N = readNumber();
         // 연결의 수
@@ -35,6 +36,58 @@ public class Main {
                     dp[i] = Math.max(dp[i], dp[prerequisites[j][0]] + 1);
                 }
             }
+            stringBuilder.append(dp[i]).append(" ");
+        }
+
+        System.out.println(stringBuilder);
+    }*/
+    // 그래프 활용
+    public static void main(String[] args) throws IOException {
+        // 과목의 수
+        int N = readNumber();
+        // 연결의 수
+        int M = readNumber();
+
+        // 선수 과목 정보 입력
+        int[][] prerequisites = new int[N + 1][N + 1];
+        int[] degree = new int[N + 1];
+        for (int i = 0; i < M; i++) {
+            int A = readNumber();
+            int B = readNumber();
+
+            prerequisites[A][B] = 1; // 단방향 그래프
+            degree[B]++; // 선수 과목이 필요한 수 표시
+        }
+
+        // 큐로 위상정렬 : 선수 과목이 필요없는 과목들을 넣어준다.
+        int[] dp = new int[N+1];
+        Queue<Integer> queue = new LinkedList<>();
+        for (int i = 1; i <= N; i++) {
+            if (degree[i] == 0) {
+                queue.offer(i);
+                dp[i] = 1;
+            }
+        }
+
+        while (!queue.isEmpty()) {
+            int cur = queue.poll();
+
+            for (int i = 1; i <= N; i++) {
+                // 해당 과목을 필요로 하는 과목이 있으면 해당 과목이 필요한 수를 감소시킨다.
+                if (prerequisites[cur][i] == 1) {
+                    degree[i]--;
+
+                    // 해당 과목이 마지막 선수 과목이였으면 큐에 넣어 주고 필요한 학기를 계산한다.
+                    if (degree[i] == 0) {
+                        queue.offer(i); // 해당과목에 선수과목이 있는지 확인하기 위해
+                        dp[i] = dp[cur] + 1;
+                    }
+                }
+            }
+        }
+
+        StringBuilder stringBuilder = new StringBuilder();
+        for (int i = 1; i <= N; i++) {
             stringBuilder.append(dp[i]).append(" ");
         }
 
