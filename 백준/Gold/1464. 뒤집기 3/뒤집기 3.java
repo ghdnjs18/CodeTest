@@ -1,4 +1,5 @@
 import java.io.*;
+import java.util.*;
 
 public class Main {
     /*
@@ -7,6 +8,7 @@ public class Main {
     * 조건 : 앞에서 i번째 문자열을 뒤집으면서 문자열을 변경할 수 있다.
     * 첫글자와 i번의 글자를 비교해 같거나 빠른경우 현재 문자열을 뒤집고 i번째 글자를 추가한 뒤 다시 뒤집어준다.
     * 아니면 i번째 글자만 추가하고 문자열을 반복해준다.
+    * -> 글자를 비교해 글자가 앞, 뒤로 들어가게 된다. - 덱을 활용할 수 있다.
     * */
 
     public static void main(String[] args) throws IOException {
@@ -16,17 +18,32 @@ public class Main {
         String str = bufferedReader.readLine();
 
         // 첫글자 추가
-        stringBuilder.append(str.charAt(0));
+        // stringBuilder.append(str.charAt(0));
+        
+        // 덱이용
+        Deque<Character> deque = new ArrayDeque<>();
+        deque.offerFirst(str.charAt(0));
         
         // 문자열 반복하면서 첫글자와 비교
         for (int i = 1; i < str.length(); i++) {
-            if (stringBuilder.charAt(0) >= str.charAt(i)) {
+            /*if (stringBuilder.charAt(0) >= str.charAt(i)) {
                 stringBuilder.reverse();
                 stringBuilder.append(str.charAt(i));
                 stringBuilder.reverse();
             } else {
                 stringBuilder.append(str.charAt(i));
+            }*/
+            
+            // 덱이용
+            if (deque.peekFirst() >= str.charAt(i)) {
+                deque.offerFirst(str.charAt(i));
+            } else {
+                deque.offerLast(str.charAt(i));
             }
+        }
+        
+        for (Character c : deque) {
+            stringBuilder.append(c);
         }
 
         System.out.println(stringBuilder);
