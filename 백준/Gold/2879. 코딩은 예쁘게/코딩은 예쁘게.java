@@ -28,26 +28,20 @@ public class Main {
         // 현재 탭수에 목표 탭수를 빼 0을 만드는 데 필요한 텝의 수를 알 수 있다.
         stringTokenizer = new StringTokenizer(bufferedReader.readLine());
         for (int i = 0; i < N; i++) {
-            tap[i] = Integer.parseInt(stringTokenizer.nextToken()) - tap[i];
+            tap[i] -= Integer.parseInt(stringTokenizer.nextToken());
         }
         
-        int prev = 0;
-        int answer = 0;
-        if(N>1) {
-            prev = tap[0];
-            for (int i = 1; i < N; i++) {
-                if(prev*tap[i]<0){
-                    answer += Math.abs(prev);
-                }else if(Math.abs(prev)>=Math.abs(tap[i])){
-                    answer += Math.abs(prev)-Math.abs(tap[i]);
-                }
-                prev = tap[i];
+        int cnt = 0;
+        for (int i = 0; i < N - 1; i++) {
+            // 동일한 부호일 경우
+            if (tap[i] * tap[i + 1] > 0) {
+                cnt += Math.max(0, Math.abs(tap[i]) - Math.abs(tap[i + 1]));
+            // 다른 부호 혹은 0일 경우
+            } else {
+                cnt += Math.abs(tap[i]);
             }
-        }else{
-            answer = tap[0];
         }
-        answer += Math.abs(prev);
 
-        System.out.println(answer);
+        System.out.println(cnt + Math.abs(tap[N - 1]));
     }
 }
