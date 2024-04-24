@@ -7,6 +7,8 @@ public class Main {
     * 주어진 값 : 움직이는 거리 D, 돌섬의 수 N, 제거하는 돌섬의 수 M, N개의 시작점에서 돌섬의 거리
     * 조건 : 최소거리의 돌섬 M개를 제거한다.
     * 목표 : M개의 돌섬 제거 후 이동거리의 최댓값
+    * 아분탐색을 이용해 최소 거리를 변경하면서 돌섬의 제거 개수를 확인한다.
+    * 돌섬의 제거 개수가 많을 경우 최소 거리를 줄이고, 아니면 최소 거리를 늘린다.
     * */
     
     public static void main(String[] args) throws IOException {
@@ -16,32 +18,32 @@ public class Main {
         int N = Integer.parseInt(stringTokenizer.nextToken());
         int M = Integer.parseInt(stringTokenizer.nextToken());
 
-        int[] stone = new int[N + 2];
+        int[] island = new int[N + 2];
         for (int i = 0; i < N; i++) {
-            stone[i] = Integer.parseInt(bufferedReader.readLine());
+            island[i] = Integer.parseInt(bufferedReader.readLine());
         }
 
         int left = 0;
         int right = D;
 
-        stone[N] = left;
-        stone[N + 1] = right;
-        Arrays.sort(stone);
+        island[N] = left;
+        island[N + 1] = right;
+        Arrays.sort(island);
 
         while (left <= right) {
             int mid = left + (right - left) / 2;
-            int sum = 0;
-            int now = 0;
 
-            for (int i = 1; i < stone.length; i++) {
-                if (stone[i] - stone[now] < mid) {
-                    sum++;
+            int now = 0;
+            int remove = 0;
+            for (int i = 1; i < island.length; i++) {
+                if (island[i] - island[now] < mid) {
+                    remove++;
                 } else {
                     now = i;
                 }
             }
 
-            if (sum > M) {
+            if (remove > M) {
                 right = mid - 1;
             } else {
                 left = mid + 1;
