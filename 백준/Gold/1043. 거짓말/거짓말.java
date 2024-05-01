@@ -11,100 +11,115 @@ public class Main {
     * 파티를 입력하면서 해당 파티에 진실을 아는 사람이 있는지 확인을 한다.
     * 진실을 알고 있는 사람이 한명이라도 있으면 해당 파티의 사람들의 진실 여부를 체크해준다.
     * 이후 파티배열을 순환하면서 진실을 아는 사람이 없으면 횟수를 헤아리고 출력해준다.
+    * -> 나중에 진실을 아는 사람이 있을 경우 그전 파티에 있는 사람은 확인이 안된다.
+    * -> 추가적으로 사람간의 연결을 그래프로 만들어서 추가적으로 진실여부를 판단해야한다.
     * */
-    
-    static int n, m;
-    static int[] truth;
-    static int[] parent;
-    static List<List<Integer>> attendee;
-    static boolean[] knowTruth;
-    public static void main(String[] args) throws Exception{
-        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringTokenizer st = new StringTokenizer(br.readLine());
-        n = Integer.parseInt(st.nextToken());
-        m = Integer.parseInt(st.nextToken());
 
-        st = new StringTokenizer(br.readLine());
-        int len = Integer.parseInt(st.nextToken());
-        truth = new int[len];
-        for(int i=0; i<len; i++){
-            truth[i] = Integer.parseInt(st.nextToken());
+    static List<Set<Integer>> persons = new ArrayList<>();
+    static boolean[] truePerson;
+    static boolean[] visited;
+
+    public static void main(String[] args) throws IOException {
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
+        StringTokenizer stringTokenizer = new StringTokenizer(bufferedReader.readLine());
+
+        // 사람의 수
+        int N = Integer.parseInt(stringTokenizer.nextToken());
+        // 파티의 수
+        int M = Integer.parseInt(stringTokenizer.nextToken());
+
+        // 사람 관계
+        for (int i = 0; i <= N; i++) {
+            persons.add(new HashSet<>());
         }
 
-        attendee = new ArrayList<>();
-        for(int i=0; i<m; i++){
-            st = new StringTokenizer(br.readLine());
-            attendee.add(new ArrayList<>());
-            len = Integer.parseInt(st.nextToken());
-            for(int j=0; j<len; j++){
-                int id = Integer.parseInt(st.nextToken());
-                attendee.get(i).add(id); //파티에 참석하는 사람
-            }
+        // 진실을 알고 있는 사람
+        stringTokenizer = new StringTokenizer(bufferedReader.readLine());
+        int trueCnt = Integer.parseInt(stringTokenizer.nextToken());
+        truePerson = new boolean[N + 1];
+        for (int i = 0; i < trueCnt; i++) {
+            truePerson[Integer.parseInt(stringTokenizer.nextToken())] = true;
         }
 
-        knowTruth = new boolean[n+1];
-        parent = new int[n+1];
-        
-        //진실을 알고 있는 사람
-        for(int t:truth){
-            knowTruth[t] = true;
-        }
+        List<List<Integer>> party = new ArrayList<>();
+        for (int i = 0; i < M; i++) {
+            party.add(new ArrayList<>());
+            stringTokenizer = new StringTokenizer(bufferedReader.readLine());
 
-        for(int i=0; i<=n; i++){
-            parent[i] = i;
-        }
+            boolean flag = false;
+            // 파티에 참석한 사람
+            int partyPerson = Integer.parseInt(stringTokenizer.nextToken());
+            for (int j = 0; j < partyPerson; j++) {
+                int person = Integer.parseInt(stringTokenizer.nextToken());
+                party.get(i).add(person);
 
-        //같이 파티에 있었던 사람 union
-        for(int i=0; i<m; i++){
-            for(int j=0; j<attendee.get(i).size()-1; j++){
-                union_node(attendee.get(i).get(j), attendee.get(i).get(j+1));
-            }
-        }
-
-        //진실을 아는 사람의 parent는 진실을 알게 됨
-        for(int i=1; i<=n; i++){
-            if(knowTruth[i]){
-                int parent = find_parent(i);
-                knowTruth[parent] = true;
-            }
-        }
-
-        int answer = 0;
-        //파티 참석자의 parent가 진실을 알고있다면 패스
-        for(int i=0; i<m; i++){
-            boolean flag = true;
-            for(int j=0; j<attendee.get(i).size(); j++){
-                int p = attendee.get(i).get(j);
-                int parent = find_parent(p);
-                if(knowTruth[parent]){
-                    flag = false;
-                    break;
+                // 해당 파티에 진실을 아는 사람이 있는지 확인
+                if (truePerson[person]) {
+                    flag = true;
                 }
             }
-            if(flag)
-                answer++;
+
+            // 진실을 아는 사람이 있으면 해당 파티의 사람들은 모두 진실을 알게된다.
+            if (flag) {
+                for (int person : party.get(i)) {
+                    truePerson[person] = true;
+                }
+            }
+
+            // 사람간의 연관관계를 추가해준다.
+            for (int personA : party.get(i)) {
+                for (int personB : party.get(i)) {
+                    persons.get(personA).add(personB);
+                    persons.get(personB).add(personA);
+                }
+            }
         }
 
-        System.out.println(answer);
-        
-    }
+        // 사람들의 관계에서 진실된 이야기를 확장 시킨다.
+//        int a = 0;
+//        for (Set<Integer> person : persons) {
+//            System.out.println(a++);
+//            for (Integer i : person) {
+//                System.out.print(i + " ");
+//            }
+//            System.out.println();
+//        }
 
-    public static int find_parent(int u){
-        if(parent[u]==u) return u;
-        return parent[u] = find_parent(parent[u]);
-    }
+        visited = new boolean[N + 1];
+        for (int i = 1; i <= N; i++) {
+            if (truePerson[i]) {
+                findTrue(i);
+            }
 
-    public static void union_node(int u, int v){
-        u = find_parent(u);
-        v = find_parent(v);
-
-        if(u>v){
-            int temp = u;
-            u = v;
-            v = temp;
         }
 
-        if(u==v) return;
-        else parent[v] = u;
+        // 고장된 이야기 횟수 확인
+        int cnt = 0;
+        for (int i = 0; i < M; i++) {
+            boolean flag = false;
+            for (int person : party.get(i)) {
+                if (truePerson[person]) {
+                    break;
+                } else {
+                    flag = true;
+                }
+            }
+            // 진실을 아는 사람이 없으면 과장된 이야기
+            if (flag) cnt++;
+        }
+
+        System.out.println(cnt);
+    }
+
+    private static void findTrue(int cur) {
+
+        visited[cur] = true;
+
+        for (int next : persons.get(cur)) {
+            if (!visited[next] && truePerson[cur]) {
+                truePerson[next] = true;
+                findTrue(next);
+            }
+        }
     }
 }
