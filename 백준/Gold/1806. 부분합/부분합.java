@@ -25,21 +25,21 @@ public class Main {
             sequence[i] = Integer.parseInt(stringTokenizer.nextToken());
         }
 
-        int sum=0;
-        int left=0;
-        int right=0;
-        int ans = Integer.MAX_VALUE;
-        int leng =0;
-        while(right <= N) {
-            if(sum >= S) { // 합이 s 이상!
+        int left = 0;
+        int right = 0;
+        int result = Integer.MAX_VALUE;
+        int sum = sequence[left];
+        while (right < N) {
+
+            if (sum < S) {
+                sum += sequence[++right];
+            } else {
+                result = Math.min(result, right - left + 1);
                 sum -= sequence[left++];
-                leng = right - left + 1; // 길이를 구하기
-                if(ans > leng) ans = leng; // 길이의 최솟값
-            }else if(sum < S) {
-                sum += sequence[right++];
             }
         }
-        System.out.println((ans) == Integer.MAX_VALUE ? 0 : ans);
+
+        System.out.println(result == Integer.MAX_VALUE ? 0 : result);
     }
 
 }
