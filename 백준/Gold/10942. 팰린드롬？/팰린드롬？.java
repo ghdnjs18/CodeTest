@@ -6,8 +6,7 @@ public class Main {
      * 주어진 값 : N개의 수열, M개의 정수 S, 정수 E
      * 조건 : 앞 뒤에서 읽었을 경우 동일하면 팰린드롬이 성립한다.
      * 목표 : M개의 질문의 S에서 E까지의 수가 팰린드롬이 성립하는지 출력
-     * 팰린드롬이 되려면 숫자의 범위가 홀수여야 한다.
-     * 주어진 두 정수의 위치에서 끝의 숫자끼리 뺄 경우 0이 되면 성립한다.
+     * 주어진 두 정수의 위치에서 끝의 숫자끼리 뺄 경우 0이 되면 성립한다. (홀수 일경우 중간 수는 제외한다)
      * 배열을 이용해서 성립 여부를 체크해두고 테스트 케이스에서 바로 출력한다. (N이 2000이니 4000000번 까지는 빠를지도?)
      */
 
@@ -26,10 +25,10 @@ public class Main {
             sequence[i] = Integer.parseInt(stringTokenizer.nextToken());
         }
 
-        int[][] dp = new int[N][N];
+        boolean[][] dp = new boolean[N][N];
         for (int i = 0; i < N; i++) {
-            for (int j = 0; j < N; j++) {
-                dp[i][j] = palindrome(i, j);
+            for (int j = i; j < N; j++) {
+                dp[i][j] = isPalindrome(i, j);
             }
         }
 
@@ -44,7 +43,7 @@ public class Main {
             // 목표 합계
             int E = Integer.parseInt(stringTokenizer.nextToken());
 
-            if (dp[S - 1][E - 1] == 0) {
+            if (dp[S - 1][E - 1]) {
                 stringBuilder.append(1).append("\n");
             } else {
                 stringBuilder.append(0).append("\n");
@@ -54,12 +53,12 @@ public class Main {
         System.out.println(stringBuilder);
     }
 
-    private static int palindrome(int start, int end) {
+    private static boolean isPalindrome(int start, int end) {
         for (int i = start, j = end; i < j; i++, j--) {
             if (sequence[i] - sequence[j] != 0) {
-                return 1;
+                return false;
             }
         }
-        return 0;
+        return true;
     }
 }
